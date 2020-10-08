@@ -53,10 +53,13 @@
     "morgan": "~1.9.1",
     "pg": "^8.2.1",
     "swagger-jsdoc": "^4.0.0",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.4",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
+    "@types/knex": "^0.16.1",
+    "@types/uuid": "^8.3.0",
     "commitizen": "^4.2.1",
     "commitlint": "^11.0.0",
     "cross-env": "^7.0.2",
