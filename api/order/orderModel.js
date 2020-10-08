@@ -17,7 +17,6 @@ const create = (order) => {
 };
 
 const update = (id, order) => {
-
   return db('orders').where({ id }).first().update(order).returning('*');
 };
 

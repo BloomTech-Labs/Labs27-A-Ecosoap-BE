@@ -164,14 +164,11 @@ router.post('/', authRequired, async (req, res) => {
   if (newOrder) {
     const id = newOrder.id || 0; //0 needs to be replaced with a string
     try {
-      await
-       Orders.findById(id).then(async (ordr) => {
+      await Orders.findById(id).then(async (ordr) => {
         if (ordr === undefined) {
           //profile not found so lets insert it
           await Orders.create(newOrder).then((order) =>
-            res
-              .status(200)
-              .json({ message: 'order created', order: order[0] })
+            res.status(200).json({ message: 'order created', order: order[0] })
           );
         } else {
           res.status(400).json({ message: 'order already exists' });
@@ -219,10 +216,10 @@ router.post('/', authRequired, async (req, res) => {
  *                profile:
  *                  $ref: '#/components/schemas/Profile'
  */
-router.put('/', authRequired, function(req, res) {
+router.put('/', authRequired, function (req, res) {
   const order = req.body;
   if (order) {
-    const id = order.id || 0;// 0 needs to be replaced
+    const id = order.id || 0; // 0 needs to be replaced
     Orders.findById(id)
       .then(
         Orders.update(id, order)
@@ -276,14 +273,14 @@ router.put('/', authRequired, function(req, res) {
  *                profile:
  *                  $ref: '#/components/schemas/Profile'
  */
-router.delete('/:id', authRequired, function(req, res) {
+router.delete('/:id', authRequired, function (req, res) {
   const id = req.params.id;
   try {
     Orders.findById(id).then((order) => {
       Orders.remove(order.id).then(() => {
         res
           .status(200)
-          .json({ message: `Order '${id}' was deleted.`, order: order});
+          .json({ message: `Order '${id}' was deleted.`, order: order });
       });
     });
   } catch (err) {
