@@ -23,7 +23,7 @@ const db = require('../../data/db-config');
 
 /**
  * List all orders
- * @returns {Promise<Order>}
+ * @returns {Promise<Order[]>}
  */
 const findAll = () => {
   return db('orders');

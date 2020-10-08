@@ -1,13 +1,13 @@
 // @ts-check
 
 const express = require('express');
-const { v4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 const authRequired = require('../middleware/authRequired');
 const Orders = require('./orderModel');
 const router = express.Router();
 
-router.get('/', authRequired, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const determinedPrice = await Orders.findBy({ priceDetermined: true });
     const undeterminedPrice = await Orders.findBy({ priceDetermined: false });
@@ -18,7 +18,7 @@ router.get('/', authRequired, async (req, res) => {
   }
 });
 
-router.get('/:id', authRequired, async (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const order = await Orders.findById(id);
@@ -33,10 +33,10 @@ router.get('/:id', authRequired, async (req, res) => {
   }
 });
 
-router.post('/', authRequired, async (req, res) => {
+router.post('/', async (req, res) => {
   const newOrder = req.body;
   if (newOrder) {
-    const id = newOrder.id || v4();
+    const id = newOrder.id || uuidv4();
     try {
       const existingOrder = await Orders.findById(id);
 
@@ -55,10 +55,10 @@ router.post('/', authRequired, async (req, res) => {
   }
 });
 
-router.put('/', authRequired, async (req, res) => {
+router.put('/', async (req, res) => {
   const order = req.body;
   if (order) {
-    const id = order.id || v4();
+    const id = order.id || uuidv4();
 
     try {
       await Orders.findById(id);
@@ -81,7 +81,7 @@ router.put('/', authRequired, async (req, res) => {
   }
 });
 
-router.delete('/:id', authRequired, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const order = await Orders.findById(id);

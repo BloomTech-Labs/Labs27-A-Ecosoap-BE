@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
+    "@types/faker": "^5.1.2",
     "@types/knex": "^0.16.1",
     "@types/uuid": "^8.3.0",
     "commitizen": "^4.2.1",
