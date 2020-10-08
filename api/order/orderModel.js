@@ -31,11 +31,11 @@ const findAll = () => {
 
 /**
  * Lists orders that match the given filter
- * @param {import('knex').Where<any, any>} filter
+ * @param {Readonly<Partial<Order>>} filter
  * @returns {Promise<Order[]>}
  */
 const findBy = (filter) => {
-  return db('orders').where(filter);
+  return db('orders').where({});
 };
 
 /**

@@ -9,8 +9,9 @@ const router = express.Router();
 
 router.get('/', authRequired, async (req, res) => {
   try {
-    const orders = await Orders.findAll();
-    res.status(200).json(orders);
+    const determinedPrice = await Orders.findBy({ priceDetermined: true });
+    const undeterminedPrice = await Orders.findBy({ priceDetermined: false });
+    res.status(200).json({ determinedPrice, undeterminedPrice });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
