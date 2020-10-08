@@ -1,6 +1,6 @@
 const express = require('express');
 const authRequired = require('../middleware/authRequired');
-const Profiles = require('./profileModel');
+const Orders = require('./orderModel');
 const router = express.Router();
 
 /**
@@ -63,9 +63,9 @@ const router = express.Router();
  *        $ref: '#/components/responses/UnauthorizedError'
  */
 router.get('/', authRequired, function (req, res) {
-  Profiles.findAll()
-    .then((profiles) => {
-      res.status(200).json(profiles);
+  Orders.findAll()
+    .then((orders) => {
+      res.status(200).json(orders);
     })
     .catch((err) => {
       console.log(err);
@@ -110,12 +110,12 @@ router.get('/', authRequired, function (req, res) {
  */
 router.get('/:id', authRequired, function (req, res) {
   const id = String(req.params.id);
-  Profiles.findById(id)
-    .then((profile) => {
-      if (profile) {
-        res.status(200).json(profile);
+  Orders.findById(id)
+    .then((order) => {
+      if (order) {
+        res.status(200).json(order);
       } else {
-        res.status(404).json({ error: 'ProfileNotFound' });
+        res.status(404).json({ error: 'OrderNotFound' });
       }
     })
     .catch((err) => {
@@ -160,20 +160,21 @@ router.get('/:id', authRequired, function (req, res) {
  *                  $ref: '#/components/schemas/Profile'
  */
 router.post('/', authRequired, async (req, res) => {
-  const profile = req.body;
-  if (profile) {
-    const id = profile.id || 0;
+  const newOrder = req.body;
+  if (newOrder) {
+    const id = newOrder.id || 0; //0 needs to be replaced with a string
     try {
-      await Profiles.findById(id).then(async (pf) => {
-        if (pf == undefined) {
+      await
+       Orders.findById(id).then(async (ordr) => {
+        if (ordr === undefined) {
           //profile not found so lets insert it
-          await Profiles.create(profile).then((profile) =>//naming convention duplicated
+          await Orders.create(newOrder).then((order) =>
             res
               .status(200)
-              .json({ message: 'profile created', profile: profile[0] })
+              .json({ message: 'order created', order: order[0] })
           );
         } else {
-          res.status(400).json({ message: 'profile already exists' });
+          res.status(400).json({ message: 'order already exists' });
         }
       });
     } catch (e) {
@@ -181,7 +182,7 @@ router.post('/', authRequired, async (req, res) => {
       res.status(500).json({ message: e.message });
     }
   } else {
-    res.status(404).json({ message: 'Profile missing' });
+    res.status(404).json({ message: 'Order missing' });
   }
 });
 /**
@@ -219,20 +220,20 @@ router.post('/', authRequired, async (req, res) => {
  *                  $ref: '#/components/schemas/Profile'
  */
 router.put('/', authRequired, function(req, res) {
-  const profile = req.body;
-  if (profile) {
-    const id = profile.id || 0;
-    Profiles.findById(id)
+  const order = req.body;
+  if (order) {
+    const id = order.id || 0;// 0 needs to be replaced
+    Orders.findById(id)
       .then(
-        Profiles.update(id, profile)
+        Orders.update(id, order)
           .then((updated) => {
             res
               .status(200)
-              .json({ message: 'profile created', profile: updated[0] });
+              .json({ message: 'order created', order: updated[0] });
           })
           .catch((err) => {
             res.status(500).json({
-              message: `Could not update profile '${id}'`,
+              message: `Could not update order '${id}'`,
               error: err.message,
             });
           })
@@ -278,16 +279,16 @@ router.put('/', authRequired, function(req, res) {
 router.delete('/:id', authRequired, function(req, res) {
   const id = req.params.id;
   try {
-    Profiles.findById(id).then((profile) => {
-      Profiles.remove(profile.id).then(() => {
+    Orders.findById(id).then((order) => {
+      Orders.remove(order.id).then(() => {
         res
           .status(200)
-          .json({ message: `Profile '${id}' was deleted.`, profile: profile });
+          .json({ message: `Order '${id}' was deleted.`, order: order});
       });
     });
   } catch (err) {
     res.status(500).json({
-      message: `Could not delete profile with ID: ${id}`,
+      message: `Could not delete order with ID: ${id}`,
       error: err.message,
     });
   }
