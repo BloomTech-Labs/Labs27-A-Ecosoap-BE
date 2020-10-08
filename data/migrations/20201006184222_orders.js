@@ -8,7 +8,7 @@ exports.up = (knex) => {
       table.string('dateOrdered').notNullable();
       table.string('status').notNullable();
       table.integer('price');
-      table.boolean('priceDetermined').notNullable(); //???
+      table.boolean('priceDetermined').notNullable(); 
       table.string('comments');
       table.string('organisation');
       table.string('organisationWebsite');

@@ -168,7 +168,7 @@ router.post('/', authRequired, async (req, res) => {
         if (pf == undefined) {
           //profile not found so lets insert it
           await Profiles.create(profile).then((
-            profile //naming convention duplicated
+            profile 
           ) =>
             res
               .status(200)
