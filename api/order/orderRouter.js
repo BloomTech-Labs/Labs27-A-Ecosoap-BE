@@ -3,7 +3,6 @@ const authRequired = require('../middleware/authRequired');
 const Orders = require('./orderModel');
 const router = express.Router();
 
-
 router.get('/', authRequired, function (req, res) {
   Orders.findAll()
     .then((orders) => {
@@ -14,7 +13,6 @@ router.get('/', authRequired, function (req, res) {
       res.status(500).json({ message: err.message });
     });
 });
-
 
 router.get('/:id', authRequired, function (req, res) {
   const id = String(req.params.id);

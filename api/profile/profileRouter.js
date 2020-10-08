@@ -167,9 +167,7 @@ router.post('/', authRequired, async (req, res) => {
       await Profiles.findById(id).then(async (pf) => {
         if (pf == undefined) {
           //profile not found so lets insert it
-          await Profiles.create(profile).then((
-            profile 
-          ) =>
+          await Profiles.create(profile).then((profile) =>
             res
               .status(200)
               .json({ message: 'profile created', profile: profile[0] })
