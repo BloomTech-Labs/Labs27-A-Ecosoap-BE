@@ -35,7 +35,7 @@ const findAll = () => {
  * @returns {Promise<Order[]>}
  */
 const findBy = (filter) => {
-  return db('orders').where({});
+  return db('orders').where(filter);
 };
 
 /**
