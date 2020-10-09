@@ -2,6 +2,7 @@ const express = require('express');
 const authRequired = require('../middleware/authRequired');
 const Orders = require('./orderModel');
 const router = express.Router();
+const {v4: uuidv4} = require('uuidv4');
 
 router.get('/', authRequired, function (req, res) {
   Orders.findAll()
@@ -32,7 +33,7 @@ router.get('/:id', authRequired, function (req, res) {
 router.post('/', authRequired, async (req, res) => {
   const newOrder = req.body;
   if (newOrder) {
-    const id = newOrder.id || 0; //0 needs to be replaced with a string
+    const id = newOrder.id || uuidv4();
     try {
       await Orders.findById(id).then(async (ordr) => {
         if (ordr === undefined) {
@@ -56,7 +57,7 @@ router.post('/', authRequired, async (req, res) => {
 router.put('/', authRequired, function (req, res) {
   const order = req.body;
   if (order) {
-    const id = order.id || 0; // 0 needs to be replaced
+    const id = newOrder.id || uuidv4(); 
     Orders.findById(id)
       .then(
         Orders.update(id, order)
