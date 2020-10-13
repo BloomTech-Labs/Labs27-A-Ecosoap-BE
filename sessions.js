@@ -19,13 +19,13 @@ app.post('/create-checkout-session', async (req, res) => {
           product_data: {
             name: 'soap',
           },
-          unit_amount: 2000,
+          unit_amount: 2000,// make dynamic
         },
-        quantity: 1,
+        quantity: 1,// make dynamic
       },
     ],
     mode: 'payment',
-    success_url: 'https://example.com/success',
+    success_url: 'https://example.com/success',// modify URL path  for FE
     cancel_url: 'https://example.com/cancel',
   });
 
@@ -48,12 +48,12 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => {
-  const path = resolve(process.env.STATIC_DIR + '/index.html');
-  res.sendFile(path);
-});
+// app.get('/', (req, res) => {
+//   const path = resolve(process.env.STATIC_DIR + '/index.html');
+//   res.sendFile(path);
+// });
 
-app.get('/config', async (req, res) => {
+app.get('/config', async (req, res) => {// ???
   const price = await stripe.prices.retrieve(process.env.PRICE);
 
   res.send({
@@ -70,45 +70,45 @@ app.get('/checkout-session', async (req, res) => {
   res.send(session);
 });
 
-app.post('/create-checkout-session', async (req, res) => {
-  const domainURL = process.env.DOMAIN;
+// app.post('/create-checkout-session', async (req, res) => {
+//   const domainURL = process.env.DOMAIN;
 
-  const { quantity, locale } = req.body;
-  // Create new Checkout Session for the order
-  // Other optional params include:
-  // [billing_address_collection] - to display billing address details on the page
-  // [customer] - if you have an existing Stripe Customer ID
-  // [customer_email] - lets you prefill the email input in the Checkout page
-  // For full details see https://stripe.com/docs/api/checkout/sessions/create
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: process.env.PAYMENT_METHODS.split(', '),
-    mode: 'payment',
-    locale: locale,
-    line_items: [
-      {
-        price: process.env.PRICE,
-        quantity: quantity
-      },
-    ],
-    // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
-    success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${domainURL}/canceled.html`,
-  });
+//   const { quantity, locale } = req.body;
+//   // Create new Checkout Session for the order
+//   // Other optional params include:
+//   // [billing_address_collection] - to display billing address details on the page
+//   // [customer] - if you have an existing Stripe Customer ID
+//   // [customer_email] - lets you prefill the email input in the Checkout page
+//   // For full details see https://stripe.com/docs/api/checkout/sessions/create
+//   const session = await stripe.checkout.sessions.create({
+//     payment_method_types: process.env.PAYMENT_METHODS.split(', '),
+//     mode: 'payment',
+//     locale: locale,
+//     line_items: [
+//       {
+//         price: process.env.PRICE,
+//         quantity: quantity
+//       },
+//     ],
+//     // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
+//     success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+//     cancel_url: `${domainURL}/canceled.html`,
+//   });
 
-  res.send({
-    sessionId: session.id,
-  });
-});
+//   res.send({
+//     sessionId: session.id,
+//   });
+// });
 
 // Webhook handler for asynchronous events.
 app.post('/webhook', async (req, res) => {
-  let data;
-  let eventType;
+  const data;
+  const eventType;
   // Check if webhook signing is configured.
   if (process.env.STRIPE_WEBHOOK_SECRET) {
     // Retrieve the event by verifying the signature using the raw body and secret.
-    let event;
-    let signature = req.headers['stripe-signature'];
+    const event;
+    const signature = req.headers['stripe-signature'];
 
     try {
       event = stripe.webhooks.constructEvent(
@@ -137,4 +137,3 @@ app.post('/webhook', async (req, res) => {
   res.sendStatus(200);
 });
 
-//app.listen(4242, () => console.log(`Node server listening on port ${4242}!`));
