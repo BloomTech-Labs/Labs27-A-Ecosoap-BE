@@ -51,6 +51,7 @@
     "knex": "^0.21.1",
     "morgan": "~1.9.1",
     "pg": "^8.2.1",
+    "stripe": "^8.110.0",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4",
     "uuid": "^8.3.1"
