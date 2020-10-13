@@ -7,7 +7,7 @@ const authRequired = require('../middleware/authRequired');
 const Orders = require('./orderModel');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authRequired, async (req, res) => {
   try {
     const determinedPrice = await Orders.findBy({ priceDetermined: true });
     const undeterminedPrice = await Orders.findBy({ priceDetermined: false });
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
     const order = await Orders.findById(id);
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authRequired, async (req, res) => {
   const newOrder = req.body;
   if (newOrder) {
     const id = newOrder.id || uuidv4();
@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/', async (req, res) => {
+router.put('/', authRequired, async (req, res) => {
   const order = req.body;
   if (order) {
     const id = order.id || uuidv4();
@@ -81,7 +81,7 @@ router.put('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authRequired, async (req, res) => {
   const { id } = req.params;
   try {
     const order = await Orders.findById(id);
