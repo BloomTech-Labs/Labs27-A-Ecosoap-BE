@@ -13,7 +13,7 @@ exports.validate = (entity, { requiredFields = true } = {}) => {
    */
   const middleware = (req, res, next) => {
     switch (entity) {
-      case 'order':
+      case 'order': {
         const order = req.body;
 
         if (Object.keys(order).length === 0) {
@@ -55,8 +55,10 @@ exports.validate = (entity, { requiredFields = true } = {}) => {
           next();
         }
         break;
-      default:
+      }
+      default: {
         next();
+      }
     }
   };
 
