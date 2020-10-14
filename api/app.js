@@ -39,6 +39,7 @@ app.use(
 
 app.use(helmet());
 
+// stripe processing
 app.use(
   express.json({
     // We need the raw body to verify webhook signatures.
