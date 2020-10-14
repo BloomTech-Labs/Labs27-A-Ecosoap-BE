@@ -2,8 +2,8 @@ const request = require('supertest');
 
 const server = require('../../api/app.js');
 const {
+  findAll,
   findById,
-  findBy,
   create,
   update,
 } = require('../../api/order/orderModel');
@@ -17,7 +17,7 @@ jest.mock('../../api/middleware/authRequired', () =>
 //GET /Orders
 describe('GET endpoints for orderRouter', () => {
   it('should return json with res status 200', async () => {
-    findBy.mockResolvedValue([]);
+    findAll.mockResolvedValue([]);
 
     const res = await request(server).get('/orders');
     expect(res.status).toBe(200);
@@ -25,19 +25,17 @@ describe('GET endpoints for orderRouter', () => {
   });
 
   it('should return seeded order data values, looking for id of 2 in array index[1]', async () => {
-    findBy.mockResolvedValue([{}, { id: '2' }]);
+    findAll.mockResolvedValue([{}, { id: '2' }]);
 
     const res = await request(server).get('/orders');
-    expect(findBy).toHaveBeenCalledWith({ priceDetermined: true });
-    expect(findBy).toHaveBeenCalledWith({ priceDetermined: false });
-    expect(res.body.determinedPrice[1].id).toBe('2');
+    expect(res.body[1].id).toBe('2');
   });
 
   it('should return all orders and values accurately: Looking for country of order 1', async () => {
-    findBy.mockResolvedValue([{ country: 'Saudi Arabia' }, {}]);
+    findAll.mockResolvedValue([{ country: 'Saudi Arabia' }, {}]);
 
     const res = await request(server).get('/orders');
-    expect(res.body.determinedPrice[0].country).toBe('Saudi Arabia');
+    expect(res.body[0].country).toBe('Saudi Arabia');
   });
 });
 
