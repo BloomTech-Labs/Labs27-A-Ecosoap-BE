@@ -63,6 +63,7 @@
     "@types/jest": "^26.0.14",
     "@types/knex": "^0.16.1",
     "@types/stripe": "^7.13.24",
+    "@types/supertest": "^2.0.10",
     "@types/uuid": "^8.3.0",
     "commitizen": "^4.2.1",
     "commitlint": "^11.0.0",
