@@ -7,6 +7,11 @@ const authRequired = require('../middleware/authRequired');
 const Orders = require('./orderModel');
 const router = express.Router();
 
+const { Stripe } = require('stripe');
+const stripe = new Stripe(process.env.STRIPE_SECRET, {
+  apiVersion: '2020-08-27',
+});
+
 router.get('/', authRequired, async (req, res) => {
   try {
     const determinedPrice = await Orders.findBy({ priceDetermined: true });
@@ -41,7 +46,27 @@ router.post('/', authRequired, async (req, res) => {
       const existingOrder = await Orders.findById(id);
 
       if (!existingOrder) {
-        const [order] = await Orders.create({ ...newOrder, id });
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ['card'],
+          line_items: [
+            {
+              price_data: {
+                currency: 'usd',
+                product_data: {
+                  name: 'soap',
+                },
+                unit_amount: 2000, // make dynamic
+              },
+              quantity: 1, // make dynamic
+            },
+          ],
+          mode: 'payment',
+
+          success_url: 'https://example.com/success', // modify URL path  for FE
+          cancel_url: 'https://example.com/cancel',
+        });
+        const [order] = await Orders.create({ ...newOrder, id: session.id });
+
         res.status(200).json({ message: 'order created', order: order });
       } else {
         res.status(400).json({ message: 'order already exists' });
