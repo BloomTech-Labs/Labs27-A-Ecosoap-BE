@@ -55,7 +55,7 @@ router.post('/', authRequired, validate('order'), async (req, res) => {
                 product_data: {
                   name: 'soap',
                 },
-                unit_amount: 2000, // make dynamic
+                unit_amount: 2000, // make dynamic with gql
               },
               quantity: 1, // make dynamic
             },
