@@ -69,8 +69,8 @@ router.post('/', authRequired(), validate('order'), async (req, res) => {
               ],
               mode: 'payment',
 
-              success_url: 'https://example.com/success', // modify URL path  for FE
-              cancel_url: 'https://example.com/cancel',
+              success_url: `${process.env.FRONTEND_URL}/dashboard`,
+              cancel_url: `${process.env.FRONTEND_URL}/dashboard`,
             })
           : { id: v4() })();
 
