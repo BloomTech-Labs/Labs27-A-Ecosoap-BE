@@ -1,11 +1,11 @@
 const request = require('supertest');
 const express = require('express');
-const Profiles = require('../../api/profile/profileModel');
+const Profiles = require('../../api/profile/profileService');
 const profileRouter = require('../../api/profile/profileRouter');
 const server = express();
 server.use(express.json());
 
-jest.mock('../../api/profile/profileModel');
+jest.mock('../../api/profile/profileService');
 // mock the auth middleware completely
 jest.mock('../../api/middleware/authRequired', () =>
   jest.fn((req, res, next) => next())
@@ -61,9 +61,9 @@ describe('profiles router endpoints', () => {
           'https://s3.amazonaws.com/uifaces/faces/twitter/hermanobrother/128.jpg',
       };
       Profiles.findById.mockResolvedValue(undefined);
-      Profiles.create.mockResolvedValue([
-        Object.assign({ id: 'd376de0577681ca93614' }, profile),
-      ]);
+      Profiles.create.mockResolvedValue(
+        Object.assign({ id: 'd376de0577681ca93614' }, profile)
+      );
       const res = await request(server).post('/profile').send(profile);
 
       expect(res.status).toBe(200);
@@ -82,7 +82,7 @@ describe('profiles router endpoints', () => {
           'https://s3.amazonaws.com/uifaces/faces/twitter/hermanobrother/128.jpg',
       };
       Profiles.findById.mockResolvedValue(profile);
-      Profiles.update.mockResolvedValue([profile]);
+      Profiles.update.mockResolvedValue(profile);
 
       const res = await request(server).put('/profile/').send(profile);
       expect(res.status).toBe(200);
