@@ -1,6 +1,9 @@
 const express = require('express');
+const { v4 } = require('uuid');
+
 const authRequired = require('../middleware/authRequired');
-const Profiles = require('./profileModel');
+const Profiles = require('./profileService');
+
 const router = express.Router();
 
 /**
@@ -62,15 +65,18 @@ const router = express.Router();
  *      403:
  *        $ref: '#/components/responses/UnauthorizedError'
  */
-router.get('/', authRequired, function (req, res) {
-  Profiles.findAll()
-    .then((profiles) => {
-      res.status(200).json(profiles);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ message: err.message });
-    });
+router.get('/', authRequired, async (req, res) => {
+  try {
+    const profiles = await Profiles.findAllBuyers();
+    res.status(200).json(profiles);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.get('/me', authRequired, async (req, res) => {
+  res.status(200).json(req.profile);
 });
 
 /**
@@ -108,19 +114,18 @@ router.get('/', authRequired, function (req, res) {
  *      404:
  *        description: 'Profile not found'
  */
-router.get('/:id', authRequired, function (req, res) {
-  const id = String(req.params.id);
-  Profiles.findById(id)
-    .then((profile) => {
-      if (profile) {
-        res.status(200).json(profile);
-      } else {
-        res.status(404).json({ error: 'ProfileNotFound' });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err.message });
-    });
+router.get('/:id', authRequired, async (req, res) => {
+  try {
+    const id = String(req.params.id);
+    const profile = await Profiles.findBuyerById(id);
+    if (profile) {
+      res.status(200).json(profile);
+    } else {
+      res.status(404).json({ error: 'ProfileNotFound' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /**
@@ -160,30 +165,26 @@ router.get('/:id', authRequired, function (req, res) {
  *                  $ref: '#/components/schemas/Profile'
  */
 router.post('/', authRequired, async (req, res) => {
-  const profile = req.body;
-  if (profile) {
-    const id = profile.id || 0;
+  const newProfile = req.body;
+  if (newProfile) {
+    const id = newProfile.id || v4();
     try {
-      await Profiles.findById(id).then(async (pf) => {
-        if (pf == undefined) {
-          //profile not found so lets insert it
-          await Profiles.create(profile).then((profile) =>
-            res
-              .status(200)
-              .json({ message: 'profile created', profile: profile[0] })
-          );
-        } else {
-          res.status(400).json({ message: 'profile already exists' });
-        }
-      });
-    } catch (e) {
-      console.error(e);
-      res.status(500).json({ message: e.message });
+      const profile = await Profiles.findBuyerById(id);
+      if (profile == undefined) {
+        const profile = await Profiles.createBuyer(newProfile);
+        res.status(200).json({ message: 'profile created', profile });
+      } else {
+        res.status(400).json({ message: 'profile already exists' });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: err.message });
     }
   } else {
     res.status(404).json({ message: 'Profile missing' });
   }
 });
+
 /**
  * @swagger
  * /profile:
@@ -218,33 +219,31 @@ router.post('/', authRequired, async (req, res) => {
  *                profile:
  *                  $ref: '#/components/schemas/Profile'
  */
-router.put('/', authRequired, function (req, res) {
-  const profile = req.body;
-  if (profile) {
-    const id = profile.id || 0;
-    Profiles.findById(id)
-      .then(
-        Profiles.update(id, profile)
-          .then((updated) => {
-            res
-              .status(200)
-              .json({ message: 'profile created', profile: updated[0] });
-          })
-          .catch((err) => {
-            res.status(500).json({
-              message: `Could not update profile '${id}'`,
-              error: err.message,
-            });
-          })
-      )
-      .catch((err) => {
-        res.status(404).json({
-          message: `Could not find profile '${id}'`,
+router.put('/', authRequired, async (req, res) => {
+  const updatedProfile = req.body;
+  if (updatedProfile) {
+    const id = updatedProfile.id || v4();
+    try {
+      await Profiles.findBuyerById(id);
+
+      try {
+        const profile = await Profiles.updateBuyer(id, updatedProfile);
+        res.status(200).json({ message: 'profile created', profile });
+      } catch (err) {
+        res.status(500).json({
+          message: `Could not update profile '${id}'`,
           error: err.message,
         });
+      }
+    } catch (err) {
+      res.status(404).json({
+        message: `Could not find profile '${id}'`,
+        error: err.message,
       });
+    }
   }
 });
+
 /**
  * @swagger
  * /profile/{id}:
@@ -275,16 +274,12 @@ router.put('/', authRequired, function (req, res) {
  *                profile:
  *                  $ref: '#/components/schemas/Profile'
  */
-router.delete('/:id', authRequired, function (req, res) {
+router.delete('/:id', authRequired, async (req, res) => {
   const id = req.params.id;
   try {
-    Profiles.findById(id).then((profile) => {
-      Profiles.remove(profile.id).then(() => {
-        res
-          .status(200)
-          .json({ message: `Profile '${id}' was deleted.`, profile: profile });
-      });
-    });
+    const profile = await Profiles.findBuyerById(id);
+    await Profiles.removeBuyer(profile.id);
+    res.status(200).json({ message: `Profile '${id}' was deleted.`, profile });
   } catch (err) {
     res.status(500).json({
       message: `Could not delete profile with ID: ${id}`,
