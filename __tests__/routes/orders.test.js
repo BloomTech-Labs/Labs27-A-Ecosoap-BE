@@ -10,8 +10,11 @@ const {
 const { createNewOrder } = require('../../helpers/createNewOrder');
 
 jest.mock('../../api/order/orderModel');
-jest.mock('../../api/middleware/authRequired', () =>
-  jest.fn((req, res, next) => next())
+jest.mock('../../api/middleware/authRequired', () => () =>
+  jest.fn((req, res, next) => {
+    req.profile = { id: 'something' };
+    next();
+  })
 );
 
 //GET /Orders

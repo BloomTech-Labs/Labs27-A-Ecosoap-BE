@@ -7,8 +7,11 @@ server.use(express.json());
 
 jest.mock('../../api/profile/profileService');
 // mock the auth middleware completely
-jest.mock('../../api/middleware/authRequired', () =>
-  jest.fn((req, res, next) => next())
+jest.mock('../../api/middleware/authRequired', () => () =>
+  jest.fn((req, res, next) => {
+    req.profile = { id: 'something' };
+    next();
+  })
 );
 
 describe('profiles router endpoints', () => {
@@ -84,7 +87,7 @@ describe('profiles router endpoints', () => {
       Profiles.findBuyerById.mockResolvedValue(profile);
       Profiles.updateBuyer.mockResolvedValue(profile);
 
-      const res = await request(server).put('/profile/').send(profile);
+      const res = await request(server).put('/profile').send(profile);
       expect(res.status).toBe(200);
       expect(res.body.profile.name).toBe('Louie Smith');
       expect(Profiles.updateBuyer.mock.calls.length).toBe(1);

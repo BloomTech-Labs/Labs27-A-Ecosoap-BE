@@ -65,7 +65,7 @@ const router = express.Router();
  *      403:
  *        $ref: '#/components/responses/UnauthorizedError'
  */
-router.get('/', authRequired, async (req, res) => {
+router.get('/', authRequired('admin'), async (req, res) => {
   try {
     const profiles = await Profiles.findAllBuyers();
     res.status(200).json(profiles);
@@ -75,7 +75,7 @@ router.get('/', authRequired, async (req, res) => {
   }
 });
 
-router.get('/me', authRequired, async (req, res) => {
+router.get('/me', authRequired(), async (req, res) => {
   res.status(200).json(req.profile);
 });
 
@@ -114,7 +114,7 @@ router.get('/me', authRequired, async (req, res) => {
  *      404:
  *        description: 'Profile not found'
  */
-router.get('/:id', authRequired, async (req, res) => {
+router.get('/:id', authRequired('admin'), async (req, res) => {
   try {
     const id = String(req.params.id);
     const profile = await Profiles.findBuyerById(id);
@@ -164,7 +164,7 @@ router.get('/:id', authRequired, async (req, res) => {
  *                profile:
  *                  $ref: '#/components/schemas/Profile'
  */
-router.post('/', authRequired, async (req, res) => {
+router.post('/', authRequired(), async (req, res) => {
   const newProfile = req.body;
   if (newProfile) {
     const id = newProfile.id || v4();
@@ -219,10 +219,10 @@ router.post('/', authRequired, async (req, res) => {
  *                profile:
  *                  $ref: '#/components/schemas/Profile'
  */
-router.put('/', authRequired, async (req, res) => {
+router.put('/', authRequired(), async (req, res) => {
   const updatedProfile = req.body;
   if (updatedProfile) {
-    const id = updatedProfile.id || v4();
+    const id = req.profile.id;
     try {
       await Profiles.findBuyerById(id);
 
@@ -274,12 +274,13 @@ router.put('/', authRequired, async (req, res) => {
  *                profile:
  *                  $ref: '#/components/schemas/Profile'
  */
-router.delete('/:id', authRequired, async (req, res) => {
-  const id = req.params.id;
+router.delete('/', authRequired(), async (req, res) => {
+  const id = req.profile.id;
   try {
-    const profile = await Profiles.findBuyerById(id);
     await Profiles.removeBuyer(profile.id);
-    res.status(200).json({ message: `Profile '${id}' was deleted.`, profile });
+    res
+      .status(200)
+      .json({ message: `Profile '${id}' was deleted.`, profile: req.profile });
   } catch (err) {
     res.status(500).json({
       message: `Could not delete profile with ID: ${id}`,
