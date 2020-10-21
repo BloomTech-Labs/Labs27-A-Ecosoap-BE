@@ -1,12 +1,18 @@
 // @ts-check
 
 const express = require('express');
-const { v4: uuidv4 } = require('uuid');
+const { v4 } = require('uuid');
 
 const authRequired = require('../middleware/authRequired');
 const { validate } = require('../middleware/validate');
+const { checkPrice } = require('../pricing/pricingService');
 const Orders = require('./orderModel');
 const router = express.Router();
+
+const { Stripe } = require('stripe');
+const stripe = new Stripe(process.env.STRIPE_SECRET, {
+  apiVersion: '2020-08-27',
+});
 
 router.get('/', authRequired(), async (req, res) => {
   try {
@@ -36,16 +42,50 @@ router.get('/:id', authRequired(), async (req, res) => {
 router.post('/', authRequired(), validate('order'), async (req, res) => {
   const newOrder = req.body;
   if (newOrder) {
-    const id = newOrder.id || uuidv4();
     try {
-      const existingOrder = await Orders.findById(id);
+      const { hasPrice, price } = await checkPrice({
+        barsRequested: newOrder.quantity,
+        contactEmailAddress: newOrder.contactEmail,
+        contactName: newOrder.contactName,
+        country: newOrder.country,
+        organizationName: newOrder.organization,
+      });
 
-      if (!existingOrder) {
-        const [order] = await Orders.create({ ...newOrder, id });
-        res.status(200).json({ message: 'order created', order: order });
-      } else {
-        res.status(400).json({ message: 'order already exists' });
-      }
+      const session = await (async () =>
+        hasPrice
+          ? await stripe.checkout.sessions.create({
+              payment_method_types: ['card'],
+              line_items: [
+                {
+                  price_data: {
+                    currency: 'usd',
+                    product_data: {
+                      name: 'soap',
+                    },
+                    unit_amount: price / newOrder.quantity,
+                  },
+                  quantity: newOrder.quantity,
+                },
+              ],
+              mode: 'payment',
+
+              success_url: 'https://example.com/success', // modify URL path  for FE
+              cancel_url: 'https://example.com/cancel',
+            })
+          : { id: v4() })();
+
+      const [order] = await Orders.create({
+        ...newOrder,
+        // @ts-ignore
+        buyerId: req.profile.id,
+        status: 'Pending',
+        dateOrdered: new Date().toISOString(),
+        priceDetermined: hasPrice,
+        price: hasPrice ? price : null,
+        id: session.id,
+      });
+
+      res.status(200).json({ message: 'order created', order: order });
     } catch (e) {
       console.error(e);
       res.status(500).json({ message: e.message });

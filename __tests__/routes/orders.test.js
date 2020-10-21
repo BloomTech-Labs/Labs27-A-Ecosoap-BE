@@ -1,21 +1,32 @@
 const request = require('supertest');
+const express = require('express');
 
-const server = require('../../api/app.js');
+const orderRouter = require('../../api/order/orderRouter');
 const {
   findAll,
   findById,
   create,
   update,
 } = require('../../api/order/orderModel');
+const { checkPrice } = require('../../api/pricing/pricingService');
 const { createNewOrder } = require('../../helpers/createNewOrder');
 
+const server = express();
+server.use(express.json());
+
 jest.mock('../../api/order/orderModel');
+jest.mock('../../api/pricing/pricingService');
 jest.mock('../../api/middleware/authRequired', () => () =>
   jest.fn((req, res, next) => {
     req.profile = { id: 'something' };
     next();
   })
 );
+
+beforeAll(() => {
+  server.use(['/order', '/orders'], orderRouter);
+  jest.clearAllMocks();
+});
 
 //GET /Orders
 describe('GET endpoints for orderRouter', () => {
@@ -83,6 +94,9 @@ describe('POST by /order endpoint to create an order', () => {
 
   it('should respond with 200 ok status when we send in an order with the body', async () => {
     create.mockImplementation((order) => [order]);
+    checkPrice.mockResolvedValue({
+      hasPrice: false,
+    });
 
     const res = await request(server).post('/orders').send(newOrder);
     expect(res.status).toBe(200);
@@ -91,6 +105,9 @@ describe('POST by /order endpoint to create an order', () => {
 
   it('response should match the seed object we sent as the body ', async () => {
     create.mockImplementation((order) => [order]);
+    checkPrice.mockResolvedValue({
+      hasPrice: false,
+    });
 
     const res = await request(server).post('/orders').send(newOrder);
     expect(res.status).toBe(200);

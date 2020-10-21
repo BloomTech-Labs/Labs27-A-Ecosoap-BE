@@ -22,8 +22,7 @@ exports.validate = (entity, { requiredFields = true } = {}) => {
           });
         } else if (
           requiredFields &&
-          (!order.buyerId ||
-            !order.quantity ||
+          (!order.quantity ||
             !order.contactName ||
             !order.contactPhone ||
             !order.contactEmail ||
@@ -38,7 +37,6 @@ exports.validate = (entity, { requiredFields = true } = {}) => {
           requiredFields &&
           (!isString(order.contactName) ||
             !isString(order.contactEmail) ||
-            !isString(order.buyerId) ||
             !isString(order.contactPhone) ||
             !isString(order.address) ||
             !isString(order.country))
