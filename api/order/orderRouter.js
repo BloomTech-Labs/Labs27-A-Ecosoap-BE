@@ -76,6 +76,8 @@ router.post('/', authRequired(), validate('order'), async (req, res) => {
 
       const [order] = await Orders.create({
         ...newOrder,
+        // @ts-ignore
+        buyerId: req.profile.id,
         status: 'Pending',
         dateOrdered: new Date().toISOString(),
         priceDetermined: hasPrice,
