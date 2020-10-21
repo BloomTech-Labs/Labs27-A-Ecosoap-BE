@@ -19,7 +19,7 @@ const makeProfileObj = (claims) => {
  * if the token is not present or fails validation. If the token is valid its
  * contents are attached to req.profile
  */
-const authRequired = async (req, res, next) => {
+const authRequired = (role) => async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization || '';
     const match = authHeader.match(/Bearer (.+)/);
@@ -32,7 +32,7 @@ const authRequired = async (req, res, next) => {
       .then(async (data) => {
         const { email } = makeProfileObj(data.claims);
         const profile = await Profiles.findByEmail(email);
-        if (profile) {
+        if (profile && (!role || profile.type === role)) {
           req.profile = profile;
         } else {
           throw new Error('Unable to process idToken');

@@ -9,7 +9,13 @@ const findAllBuyers = async () => {
         buyers {
           id
           email
+          password
+          organizationName
+          organizationWebsite
           contactName
+          contactPhone
+          address
+          country
         }
       }
     `
@@ -59,7 +65,13 @@ const findBuyerById = async (id) => {
         buyerById(input: { id: $id }) {
           id
           email
+          password
+          organizationName
+          organizationWebsite
           contactName
+          contactPhone
+          address
+          country
         }
       }
     `,
