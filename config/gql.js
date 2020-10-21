@@ -1,1 +1,1 @@
-exports.url = process.env.GRAPHQL_URL
+exports.url = process.env.GRAPHQL_URL;
