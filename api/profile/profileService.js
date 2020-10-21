@@ -1,7 +1,7 @@
 const { gql, request } = require('graphql-request');
 const { url } = require('../../config/gql');
 
-const findAll = async () => {
+const findAllBuyers = async () => {
   const { buyers } = await request(
     url,
     gql`
@@ -17,12 +17,41 @@ const findAll = async () => {
   return buyers.map((buyer) => ({ ...buyer, type: 'buyer' }));
 };
 
+const findAllAdmins = async () => {
+  const { administrators } = await request(
+    url,
+    gql`
+      {
+        administrators {
+          id
+          email
+        }
+      }
+    `
+  );
+  return administrators.map((admin) => ({ ...admin, type: 'admin' }));
+};
+
+const findAll = async () => {
+  return [...(await findAllAdmins()), ...(await findAllBuyers())];
+};
+
+const findAdminByEmail = async (email) => {
+  const profiles = await findAllAdmins();
+  return profiles.find((profile) => profile.email === email);
+};
+
+const findBuyerByEmail = async (email) => {
+  const profiles = await findAllBuyers();
+  return profiles.find((profile) => profile.email === email);
+};
+
 const findByEmail = async (email) => {
   const profiles = await findAll();
   return profiles.find((profile) => profile.email === email);
 };
 
-const findById = async (id) => {
+const findBuyerById = async (id) => {
   const { buyerById } = await request(
     url,
     gql`
@@ -36,10 +65,10 @@ const findById = async (id) => {
     `,
     { id }
   );
-  return { ...buyerById, type: 'buyer' };
+  return buyerById ? { ...buyerById, type: 'buyer' } : undefined;
 };
 
-const create = async (profile) => {
+const createBuyer = async (profile) => {
   const { success, error } = await request(
     url,
     gql`
@@ -54,13 +83,13 @@ const create = async (profile) => {
   );
 
   if (success) {
-    return findByEmail(profile.email);
+    return findBuyerByEmail(profile.email);
   } else {
     throw new Error(error);
   }
 };
 
-const update = async (id, profile) => {
+const updateBuyer = async (id, profile) => {
   const { updateBuyerProfile } = await request(
     url,
     gql`
@@ -83,11 +112,13 @@ const update = async (id, profile) => {
     { profile: { ...profile, userId: id } }
   );
 
-  return { ...updateBuyerProfile.buyer, type: 'buyer' };
+  return updateBuyerProfile.buyer
+    ? { ...updateBuyerProfile.buyer, type: 'buyer' }
+    : undefined;
 };
 
-const remove = async (email) => {
-  const buyer = await findByEmail(email);
+const removeBuyer = async (email) => {
+  const buyer = await findBuyerByEmail(email);
 
   const { success, error } = await request(
     url,
@@ -109,4 +140,15 @@ const remove = async (email) => {
   }
 };
 
-module.exports = { findAll, findById, findByEmail, create, update, remove };
+module.exports = {
+  findAllBuyers,
+  findBuyerById,
+  findBuyerByEmail,
+  createBuyer,
+  updateBuyer,
+  removeBuyer,
+  findAllAdmins,
+  findAdminByEmail,
+  findAll,
+  findByEmail,
+};

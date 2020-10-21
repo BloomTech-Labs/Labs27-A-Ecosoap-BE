@@ -67,12 +67,16 @@ const router = express.Router();
  */
 router.get('/', authRequired, async (req, res) => {
   try {
-    const profiles = await Profiles.findAll();
+    const profiles = await Profiles.findAllBuyers();
     res.status(200).json(profiles);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
   }
+});
+
+router.get('/me', authRequired, async (req, res) => {
+  res.status(200).json(req.profile);
 });
 
 /**
@@ -113,7 +117,7 @@ router.get('/', authRequired, async (req, res) => {
 router.get('/:id', authRequired, async (req, res) => {
   try {
     const id = String(req.params.id);
-    const profile = await Profiles.findById(id);
+    const profile = await Profiles.findBuyerById(id);
     if (profile) {
       res.status(200).json(profile);
     } else {
@@ -165,9 +169,9 @@ router.post('/', authRequired, async (req, res) => {
   if (newProfile) {
     const id = newProfile.id || v4();
     try {
-      const profile = await Profiles.findById(id);
+      const profile = await Profiles.findBuyerById(id);
       if (profile == undefined) {
-        const profile = await Profiles.create(newProfile);
+        const profile = await Profiles.createBuyer(newProfile);
         res.status(200).json({ message: 'profile created', profile });
       } else {
         res.status(400).json({ message: 'profile already exists' });
@@ -220,10 +224,10 @@ router.put('/', authRequired, async (req, res) => {
   if (updatedProfile) {
     const id = updatedProfile.id || v4();
     try {
-      await Profiles.findById(id);
+      await Profiles.findBuyerById(id);
 
       try {
-        const profile = await Profiles.update(id, updatedProfile);
+        const profile = await Profiles.updateBuyer(id, updatedProfile);
         res.status(200).json({ message: 'profile created', profile });
       } catch (err) {
         res.status(500).json({
@@ -273,8 +277,8 @@ router.put('/', authRequired, async (req, res) => {
 router.delete('/:id', authRequired, async (req, res) => {
   const id = req.params.id;
   try {
-    const profile = await Profiles.findById(id);
-    await Profiles.remove(profile.id);
+    const profile = await Profiles.findBuyerById(id);
+    await Profiles.removeBuyer(profile.id);
     res.status(200).json({ message: `Profile '${id}' was deleted.`, profile });
   } catch (err) {
     res.status(500).json({
