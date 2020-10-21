@@ -4,8 +4,7 @@ module.exports = {
     info: {
       title: 'ecosoap-be',
       version: '0.1.0',
-      description:
-        'ecosoap-be',
+      description: 'ecosoap-be',
       license: {
         name: 'MIT',
         url: 'https://en.wikipedia.org/wiki/MIT_License',
