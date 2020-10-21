@@ -277,7 +277,7 @@ router.put('/', authRequired(), async (req, res) => {
 router.delete('/', authRequired(), async (req, res) => {
   const id = req.profile.id;
   try {
-    await Profiles.removeBuyer(profile.id);
+    await Profiles.removeBuyer(req.profile.id);
     res
       .status(200)
       .json({ message: `Profile '${id}' was deleted.`, profile: req.profile });
