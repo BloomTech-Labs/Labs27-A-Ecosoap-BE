@@ -1,7 +1,7 @@
 /*
  * This is an example of using middleware to secure routers.
  */
-const Profiles = require('../profile/profileModel');
+const Profiles = require('../profile/profileService');
 const createError = require('http-errors');
 const OktaJwtVerifier = require('@okta/jwt-verifier');
 const oktaVerifierConfig = require('../../config/okta');
@@ -19,7 +19,7 @@ const makeProfileObj = (claims) => {
  * if the token is not present or fails validation. If the token is valid its
  * contents are attached to req.profile
  */
-const authRequired = async (req, res, next) => {
+const authRequired = (role) => async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization || '';
     const match = authHeader.match(/Bearer (.+)/);
@@ -30,9 +30,9 @@ const authRequired = async (req, res, next) => {
     oktaJwtVerifier
       .verifyAccessToken(idToken, oktaVerifierConfig.expectedAudience)
       .then(async (data) => {
-        const jwtUserObj = makeProfileObj(data.claims);
-        const profile = await Profiles.findOrCreateProfile(jwtUserObj);
-        if (profile) {
+        const { email } = makeProfileObj(data.claims);
+        const profile = await Profiles.findByEmail(email);
+        if (profile && (!role || profile.type === role)) {
           req.profile = profile;
         } else {
           throw new Error('Unable to process idToken');
