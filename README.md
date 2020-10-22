@@ -6,22 +6,20 @@ For steps on how to work with this repository [please see here](https://docs.lab
 
 # Project
 
-You can find the deployed project at [🚫URL NAME GOES HERE](🚫copy and paste URL here).
+You can find the deployed project at [EcoSoap Bank](https://a27.ecosoap.dev/).
 
 ## Contributors
 
-🚫Add contributor info below, make sure add images and edit the social links for each member. Add to or delete these place-holders as needed
+|  [William Sedlacek](https://github.com/wSedlacek/) |  [Isaac Stott](https://github.com/Istott/) |  [Kolade Junaid](https://github.com/Shamskol/) | [Francisco Barrios](https://github.com/shighetari)  |  [Alexander Heraimenka](https://github.com/hera/) |
+|---|---|---|---|---|
+| [<img src="https://avatars3.githubusercontent.com/u/8206108?s=400&u=07702a7ff0ff7b2f253178b801e26faa2af6ded8&v=4" width = "200" />](https://github.com/wSedlacek)   |  [<img src="https://avatars0.githubusercontent.com/u/59525203?s=400&u=76f4098f918d0a26a022315c092a7a01efe497e6&v=4" width = "200" />](https://github.com/Istott) | [<img src="https://avatars3.githubusercontent.com/u/50210745?s=400&u=5237aae954875353d9ea2b43118c3aa36fe46df7&v=4" width = "200" />](https://github.com/Shamskol)  | [<img src="https://avatars2.githubusercontent.com/u/47320015?s=400&u=6998c6b0dfe2b2aea8298d321789421df3d8d55f&v=4" width = "200" />](https://github.com/shighetari)  | [<img src="https://avatars1.githubusercontent.com/u/21314337?s=400&u=42a99b5f3a8f562fff6ef514ba4ee0248c2529d4&v=4" width = "200" />](https://github.com/hera)  |
+| [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/wSedlacek)  |  [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Istott) |  [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Shamskol) | [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/shighetari)  |  [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/hera) |
+| [<img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/wsedlacek/)  | [<img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/istott/)  |  [<img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/kolade-junaid/) |  [<img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/developerbarrios/) |  [<img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/aheraimenka/) |
 
-|                                                      [Student 1](https://github.com/)                                                       |                                                       [Student 2](https://github.com/)                                                        |                                                      [Student 3](https://github.com/)                                                       |                                                       [Student 4](https://github.com/)                                                        |                                                      [Student 5](https://github.com/)                                                       |
-| :-----------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: |
-| [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/) | [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/) | [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/) | [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-female.png" width = "200" />](https://github.com/) | [<img src="https://www.dalesjewelers.com/wp-content/uploads/2018/10/placeholder-silhouette-male.png" width = "200" />](https://github.com/) |
-|                                [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/)                                |                            [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/honda0306)                             |                          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Mister-Corn)                           |                          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/NandoTheessen)                           |                           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/wvandolah)                            |
-|                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                |                 [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                 |                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                |                 [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                 |                [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/)                |
 
 <br>
 <br>
 
-🚫 Optional examples of using images with links for your tech stack, make sure to change these to fit your project
 
 ![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)
 ![node express](https://img.shields.io/node/v-lts/express)
@@ -37,9 +35,9 @@ You can find the deployed project at [🚫URL NAME GOES HERE](🚫copy and paste
 - feature four
 - feature five
 
-#### Back end deployed to `🚫insert service here`
+#### Back end deployed to `Heroku`
 
-#### [Front end](🚫link to back end repo here) built using:
+#### [Front end](https://github.com/Lambda-School-Labs/Labs27-A-Ecosoap-FE) built using:
 
 #### 🚫 back end framework and key libraries go here
 
